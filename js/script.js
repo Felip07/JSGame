@@ -1,12 +1,15 @@
 const player = document.getElementById("player");
+const bg = document.getElementById("background");
 let posX = 0;
-let posY = 0;
 let rotation = 0;
+speed = 10;
 
-document.addEventListener("keydown", movimento);
+document.addEventListener("keydown", movement);
 
-function movimento(event) {
-  speed = 10;
+function movement(event) {
+  const playerWidth = player.clientWidth;
+  const bgWidth = bg.clientWidth;
+
   switch (event.key) {
     case "w":
       console.log("cima");
@@ -30,7 +33,7 @@ function movimento(event) {
     rotation -= 180;
     console.log(rotation);
   } else if (event.key === "d") {
-    player.style.transform 
+    player.style.transform;
     console.log(rotation);
   }
 
