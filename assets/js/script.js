@@ -1,11 +1,12 @@
-const player = document.getElementById("player");
-const bg = document.getElementById("container");
-let posX = 0;
+const player = document.getElementById("player"); // Seleciociona player como elemento
+const bg = document.getElementById("container"); // Seleciona fundo como elemento
+let posX = 0; // Posiçao X incial
 let posY = 0;
-let side = 0;
 let moveLeft = false;
 let moveRight = false;
-let speed = 10;
+let direction = 1;
+let speed = 0;
+let running = false;
 
 document.addEventListener("keydown", function (event) {
   if (event.key === "a" || event.key === "ArrowLeft") {
@@ -13,6 +14,8 @@ document.addEventListener("keydown", function (event) {
   } else if (event.key === "d" || event.key === "ArrowRight") {
     moveRight = true;
   }
+  speed = running ? 1 : 10;
+  movement();
 });
 
 document.addEventListener("keyup", function (event) {
@@ -21,47 +24,59 @@ document.addEventListener("keyup", function (event) {
   } else if (event.key === "d" || event.key === "ArrowRight") {
     moveRight = false;
   }
+  speed = running ? 1 : 10;
+
+  if (!running) {
+    speed = 0;
+  }
 });
 
+// Movimentação e Colisão
 function movement() {
   const playerWidth = player.clientWidth;
   const bgWidth = bg.clientWidth;
 
   if (moveLeft) {
+    console.log("left");
+    direction = -1;
+    posX -= speed;
+  } else if (moveRight) {
+    console.log("right");
+    direction = 1;
     posX += speed;
   }
-  if (moveRight) {
-    posX -= speed;
-  }
 
-  switch (event.key) {
-    case "w":
-      console.log("cima");
-      posY -= speed;
-      break;
-    case "s":
-      console.log("baixo");
-      posY += speed;
-      break;
-    case "a":
-      console.log("esquerda");
-      posX -= speed;
-      break;
-    case "d":
-      console.log("direita");
-      posX += speed;
-      break;
-  }
-
-  if (event.key === "a") {
-    side -= 180;
-    console.log(side);
-  } else if (event.key === "d") {
-    player.style.transform;
-    console.log(side);
+  if (posX < 0) {
+    posX = 0;
+    console.log("colidiu!");
+  } else if (posX + playerWidth > bgWidth) {
+    posX = bgWidth - playerWidth;
+    console.log("colidiu!");
   }
 
   player.style.left = posX + "px";
-  player.style.bottom = posY + "px";
-  side = 0;
+  player.style.transform = `scaleX(${direction})`;
 }
+
+document.addEventListener("keydown", function (event) {
+  if (event.key === "Shift") {
+    running = true;
+    console.log("running!");
+    speed = 10;
+  }
+});
+
+document.addEventListener("keyup", function (event) {
+  if (event.key === "Shift") {
+    running = false;
+    console.log("not running!");
+    speed = 1;
+  }
+});
+
+function updateXPosition() {
+  movement();
+  requestAnimationFrame(updateXPosition);
+}
+
+updateXPosition();
