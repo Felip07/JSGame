@@ -1,2 +1,2 @@
 # JSGame
-teste game in javascript
+jogo teste em javascript
